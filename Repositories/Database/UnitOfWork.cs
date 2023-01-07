@@ -11,7 +11,7 @@ namespace TaskApp.Repositories.Database
         }
         public ToDoRepository ToDoRepository { get; private set; }
 
-        public async void SaveAsync()
+        public async Task SaveAsync()
         {
             await context.SaveChangesAsync();
         }

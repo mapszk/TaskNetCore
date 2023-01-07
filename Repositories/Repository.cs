@@ -18,7 +18,7 @@ namespace TaskApp.Repositories
             return await context.Set<T>().FindAsync(id);
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<List<T>> GetAll()
         {
             return await context.Set<T>().ToListAsync();
         }
@@ -36,6 +36,11 @@ namespace TaskApp.Repositories
         public void Update(T entity)
         {
             context.Set<T>().Update(entity);
+        }
+
+        Task<IEnumerable<T>> IRepository<T>.GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }
