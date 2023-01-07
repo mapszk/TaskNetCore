@@ -79,3 +79,5 @@ C:\Users\Martin\Documents\TaskNetCore\obj\Debug\net6.0\TaskApp.pdb
 C:\Users\Martin\Documents\TaskNetCore\obj\Debug\net6.0\TaskApp.genruntimeconfig.cache
 C:\Users\Martin\Documents\TaskNetCore\obj\Debug\net6.0\ref\TaskApp.dll
 C:\Users\Martin\Documents\TaskNetCore\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\Martin\Documents\TaskNetCore\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\Martin\Documents\TaskNetCore\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using TaskApp.Models;
 using TaskApp.Repositories.Database;
 using TaskApp.Repositories.Interfaces;
 
 namespace TaskApp.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext context;
 
@@ -38,9 +39,10 @@ namespace TaskApp.Repositories
             context.Set<T>().Update(entity);
         }
 
-        Task<IEnumerable<T>> IRepository<T>.GetAll()
+        public async Task<bool> Exists(int id)
         {
-            throw new NotImplementedException();
+            var exists = await context.Set<T>().AnyAsync(x => x.Id == id);
+            return exists;
         }
     }
 }

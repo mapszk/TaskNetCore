@@ -19,6 +19,7 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddScoped<UnitOfWork>();
+        services.AddAutoMapper(typeof(Startup));
     }
 
     public void Configure(WebApplication app, IWebHostEnvironment env)

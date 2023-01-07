@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using TaskApp.DTOs;
 using TaskApp.Models;
 using TaskApp.Repositories.Database;
 
@@ -9,36 +11,54 @@ namespace TaskApp.Controllers
     public class ToDosController : ControllerBase
     {
         private readonly UnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
-        public ToDosController(UnitOfWork unitOfWork)
+        public ToDosController(UnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ToDo>> Get([FromRoute] int id)
+        public async Task<ActionResult<ToDoDTO>> Get([FromRoute] int id)
         {
             var toDo = await unitOfWork.ToDoRepository.Get(id);
             if (toDo == null)
             {
                 return NotFound();
             }
-            return toDo;
+            return mapper.Map<ToDoDTO>(toDo);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ToDo>>> GetAll()
+        public async Task<ActionResult<List<ToDoDTO>>> GetAll()
         {
             var toDos = await unitOfWork.ToDoRepository.GetAll();
-            return toDos;
+            return mapper.Map<List<ToDoDTO>>(toDos);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ToDo>> Post([FromBody] ToDo newTodo)
+        public async Task<ActionResult<ToDoDTO>> Post([FromBody] CreateToDoDTO todoDTO)
         {
-            await unitOfWork.ToDoRepository.Add(newTodo);
+            var toDo = mapper.Map<ToDo>(todoDTO);
+            await unitOfWork.ToDoRepository.Add(toDo);
             await unitOfWork.SaveAsync();
-            return newTodo;
+            return Created(nameof(Get), mapper.Map<ToDoDTO>(toDo));
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ToDoDTO>> Put([FromRoute] int id, [FromBody] UpdateToDoDTO updateToDoDTO)
+        {
+            var exists = await unitOfWork.ToDoRepository.Exists(id);
+            if (!exists)
+            {
+                return NotFound();
+            }
+            var toDo = mapper.Map<ToDo>(updateToDoDTO);
+            toDo.Id = id;
+            unitOfWork.ToDoRepository.Update(toDo);
+            await unitOfWork.SaveAsync();
+            return Ok(mapper.Map<ToDoDTO>(toDo));
         }
 
         [HttpDelete("{id:int}")]
