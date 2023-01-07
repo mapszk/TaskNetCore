@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projects\\TaskApp\\TaskApp.csproj": {}
+    "C:\\Users\\Martin\\Documents\\TaskNetCore\\TaskApp.csproj": {}
   },
   "projects": {
-    "C:\\Projects\\TaskApp\\TaskApp.csproj": {
+    "C:\\Users\\Martin\\Documents\\TaskNetCore\\TaskApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\TaskApp\\TaskApp.csproj",
+        "projectUniqueName": "C:\\Users\\Martin\\Documents\\TaskNetCore\\TaskApp.csproj",
         "projectName": "TaskApp",
-        "projectPath": "C:\\Projects\\TaskApp\\TaskApp.csproj",
+        "projectPath": "C:\\Users\\Martin\\Documents\\TaskNetCore\\TaskApp.csproj",
         "packagesPath": "C:\\Users\\Martin\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\TaskApp\\obj\\",
+        "outputPath": "C:\\Users\\Martin\\Documents\\TaskNetCore\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Martin\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Martin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,6 +40,20 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
@@ -62,7 +78,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.404\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
