@@ -1,6 +1,6 @@
-namespace TaskApp.DTOs
+namespace TaskApp.Models
 {
-    public class TaskDTO
+    public class ToDo
     {
         public int Id { get; set; }
         public string? Description { get; set; }
