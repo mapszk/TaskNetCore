@@ -26,7 +26,6 @@ C:\Projects\TaskApp\obj\Debug\net6.0\TaskApp.pdb
 C:\Projects\TaskApp\obj\Debug\net6.0\TaskApp.genruntimeconfig.cache
 C:\Projects\TaskApp\obj\Debug\net6.0\ref\TaskApp.dll
 C:\Users\Martin\Documents\TaskNetCore\bin\Debug\net6.0\appsettings.json
-C:\Users\Martin\Documents\TaskNetCore\bin\Debug\net6.0\appsetings.Development.json
 C:\Users\Martin\Documents\TaskNetCore\bin\Debug\net6.0\TaskApp.exe
 C:\Users\Martin\Documents\TaskNetCore\bin\Debug\net6.0\TaskApp.deps.json
 C:\Users\Martin\Documents\TaskNetCore\bin\Debug\net6.0\TaskApp.runtimeconfig.json
@@ -79,3 +78,4 @@ C:\Users\Martin\Documents\TaskNetCore\obj\Debug\net6.0\refint\TaskApp.dll
 C:\Users\Martin\Documents\TaskNetCore\obj\Debug\net6.0\TaskApp.pdb
 C:\Users\Martin\Documents\TaskNetCore\obj\Debug\net6.0\TaskApp.genruntimeconfig.cache
 C:\Users\Martin\Documents\TaskNetCore\obj\Debug\net6.0\ref\TaskApp.dll
+C:\Users\Martin\Documents\TaskNetCore\bin\Debug\net6.0\appsettings.Development.json
