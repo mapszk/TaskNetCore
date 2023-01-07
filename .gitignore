@@ -1,1 +1,4 @@
 .env
+appsetings.*.json
+postgresql
+postgresql/*
