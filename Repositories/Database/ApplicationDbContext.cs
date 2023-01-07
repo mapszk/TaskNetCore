@@ -15,6 +15,6 @@ namespace TaskApp.Repositories.Database
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<ToDo> ToDos { get; set; }
+        public DbSet<ToDo>? ToDos { get; set; }
     }
 }
