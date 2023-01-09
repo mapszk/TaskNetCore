@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "j5WhLixNYL0ZOfUajQo4v6j2JM2kW6mR3UpkHya7hzbQdboYa5AD8lbKyiVoZZN1w8hloyEfQytysMEqJMmMVw==",
+  "dgSpecHash": "ur56UnOajUSEFeJcKv6T8zfB58XdT3iQ9QHyUxXlCBVCnDC3dTZF97NYxPnnpvhnssS3HdYQlgswxHNVoKUCvA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Martin\\Documents\\TaskNetCore\\TaskApp.csproj",
+  "projectFilePath": "C:\\Projects\\TaskApp\\TaskApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Martin\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\Martin\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
