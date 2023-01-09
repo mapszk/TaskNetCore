@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using TaskApp.Models;
+
 namespace TaskApp.Repositories.Database
 {
     public class UnitOfWork : IDisposable
@@ -13,12 +16,28 @@ namespace TaskApp.Repositories.Database
 
         public async Task SaveAsync()
         {
+            AddTimestamps();
             await context.SaveChangesAsync();
         }
 
         public void Dispose()
         {
             context.Dispose();
+        }
+
+        private void AddTimestamps()
+        {
+            var entities = context.ChangeTracker
+                .Entries()
+                .Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+            foreach (var entity in entities)
+            {
+                if (entity.State == EntityState.Added)
+                {
+                    ((BaseEntity)entity.Entity).CreatedAt = DateTime.UtcNow;
+                }
+                ((BaseEntity)entity.Entity).UpdatedAt = DateTime.UtcNow;
+            }
         }
     }
 }

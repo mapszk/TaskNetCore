@@ -37,6 +37,7 @@ namespace TaskApp.Repositories
         public void Update(T entity)
         {
             context.Set<T>().Update(entity);
+            context.Entry<T>(entity).Property(x => x.CreatedAt).IsModified = false;
         }
 
         public async Task<bool> Exists(int id)
