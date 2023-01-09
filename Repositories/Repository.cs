@@ -24,9 +24,9 @@ namespace TaskApp.Repositories
             return await context.Set<T>().ToListAsync();
         }
 
-        public async Task Add(T entity)
+        public void Add(T entity)
         {
-            await context.Set<T>().AddAsync(entity);
+            context.Set<T>().Add(entity);
         }
 
         public void Delete(T entity)
@@ -37,7 +37,6 @@ namespace TaskApp.Repositories
         public void Update(T entity)
         {
             context.Set<T>().Update(entity);
-            context.Entry<T>(entity).Property(x => x.CreatedAt).IsModified = false;
         }
 
         public async Task<bool> Exists(int id)
@@ -45,5 +44,6 @@ namespace TaskApp.Repositories
             var exists = await context.Set<T>().AnyAsync(x => x.Id == id);
             return exists;
         }
+
     }
 }
