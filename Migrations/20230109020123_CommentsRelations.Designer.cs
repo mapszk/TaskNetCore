@@ -12,7 +12,7 @@ using TaskApp.Repositories.Database;
 namespace TaskApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230109013700_CommentsRelations")]
+    [Migration("20230109020123_CommentsRelations")]
     partial class CommentsRelations
     {
         /// <inheritdoc />
@@ -33,9 +33,6 @@ namespace TaskApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CommentId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
@@ -50,8 +47,6 @@ namespace TaskApp.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CommentId");
 
                     b.HasIndex("ToDoId");
 
@@ -86,12 +81,8 @@ namespace TaskApp.Migrations
 
             modelBuilder.Entity("TaskApp.Models.Comment", b =>
                 {
-                    b.HasOne("TaskApp.Models.Comment", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("CommentId");
-
                     b.HasOne("TaskApp.Models.ToDo", "Todo")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("ToDoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -99,7 +90,7 @@ namespace TaskApp.Migrations
                     b.Navigation("Todo");
                 });
 
-            modelBuilder.Entity("TaskApp.Models.Comment", b =>
+            modelBuilder.Entity("TaskApp.Models.ToDo", b =>
                 {
                     b.Navigation("Comments");
                 });

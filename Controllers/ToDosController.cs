@@ -20,9 +20,9 @@ namespace TaskApp.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ToDoDTO>> Get([FromRoute] int id)
+        public ActionResult<ToDoDTO> Get([FromRoute] int id)
         {
-            var toDo = await unitOfWork.ToDoRepository.Get(id);
+            var toDo = unitOfWork.ToDoRepository.GetToDoDetails(id);
             if (toDo == null)
             {
                 return NotFound();
@@ -31,10 +31,10 @@ namespace TaskApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ToDoDTO>>> GetAll()
+        public async Task<ActionResult<List<ToDoShortDTO>>> GetAll()
         {
-            var toDos = await unitOfWork.ToDoRepository.GetAll();
-            return mapper.Map<List<ToDoDTO>>(toDos);
+            var toDos = await unitOfWork.ToDoRepository.GetShortToDos();
+            return mapper.Map<List<ToDoShortDTO>>(toDos);
         }
 
         [HttpPost]

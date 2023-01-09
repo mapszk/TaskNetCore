@@ -10,6 +10,5 @@ namespace TaskApp.Models
         public int ToDoId { get; set; }
         [Required]
         public ToDo? Todo { get; set; }
-        public List<Comment>? Comments { get; set; }
     }
 }

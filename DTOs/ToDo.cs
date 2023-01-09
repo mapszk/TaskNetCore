@@ -12,6 +12,16 @@ namespace TaskApp.DTOs
         public List<CommentDTO>? Comments { get; set; }
     }
 
+    public class ToDoShortDTO
+    {
+        public int Id { get; set; }
+        public string? Description { get; set; }
+        public bool Completed { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public int CommentsAmount { get; set; }
+    }
+
     public class CreateToDoDTO
     {
         [Required(ErrorMessage = "Description is required")]
