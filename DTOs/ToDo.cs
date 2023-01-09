@@ -9,6 +9,7 @@ namespace TaskApp.DTOs
         public bool Completed { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public List<CommentDTO>? Comments { get; set; }
     }
 
     public class CreateToDoDTO

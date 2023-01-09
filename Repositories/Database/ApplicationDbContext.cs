@@ -16,5 +16,6 @@ namespace TaskApp.Repositories.Database
         }
 
         public DbSet<ToDo>? ToDos { get; set; }
+        public DbSet<Comment>? Comments { get; set; }
     }
 }

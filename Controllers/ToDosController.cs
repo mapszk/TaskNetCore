@@ -73,5 +73,19 @@ namespace TaskApp.Controllers
             await unitOfWork.SaveAsync();
             return Ok();
         }
+
+        [HttpPost("{toDoId:int}/comment")]
+        public async Task<ActionResult<ToDoDTO>> Comment([FromRoute] int toDoId, [FromBody] CreateCommentDTO createCommentDTO)
+        {
+            var toDo = unitOfWork.ToDoRepository.Get(toDoId);
+            if(toDo == null)
+            {
+                return BadRequest($"To do with ID {toDoId} doesn't exists");
+            }
+            var comment = mapper.Map<Comment>(createCommentDTO);
+            comment.ToDoId = toDoId;
+            await unitOfWork.SaveAsync();
+            return Ok(mapper.Map<ToDoDTO>(toDo));
+        }
     }
 }
