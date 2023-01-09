@@ -7,6 +7,7 @@ namespace TaskApp.DTOs
         public int Id { get; set; }
         public string? Description { get; set; }
         public bool Completed { get; set; }
+        public List<CommentDTO> Comments { get; set; }
     }
 
     public class CreateToDoDTO

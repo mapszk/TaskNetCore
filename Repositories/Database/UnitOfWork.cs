@@ -8,8 +8,10 @@ namespace TaskApp.Repositories.Database
         {
             this.context = context;
             this.ToDoRepository = new ToDoRepository(this.context);
+            this.CommentRepository = new CommentRepository(this.context);
         }
         public ToDoRepository ToDoRepository { get; private set; }
+        public CommentRepository CommentRepository { get; private set; }
 
         public async Task SaveAsync()
         {

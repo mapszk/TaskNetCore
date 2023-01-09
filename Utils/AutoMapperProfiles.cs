@@ -11,6 +11,9 @@ namespace TaskApp.Utils
             CreateMap<ToDo, ToDoDTO>();
             CreateMap<CreateToDoDTO, ToDo>();
             CreateMap<UpdateToDoDTO, ToDo>();
+
+            CreateMap<CreateCommentDTO, Comment>();
+            CreateMap<Comment, CommentDTO>();
         }
     }
 }
