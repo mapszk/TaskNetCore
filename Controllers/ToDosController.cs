@@ -49,14 +49,12 @@ namespace TaskApp.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ToDoDTO>> Put([FromRoute] int id, [FromBody] UpdateToDoDTO updateToDoDTO)
         {
-            var exists = await unitOfWork.ToDoRepository.Exists(id);
-            if (!exists)
+            var toDo = await unitOfWork.ToDoRepository.Get(id);
+            if (toDo == null)
             {
                 return NotFound();
             }
-            var toDo = mapper.Map<ToDo>(updateToDoDTO);
-            toDo.Id = id;
-            unitOfWork.ToDoRepository.Update(toDo);
+            mapper.Map(updateToDoDTO, toDo);
             await unitOfWork.SaveAsync();
             return Ok(mapper.Map<ToDoDTO>(toDo));
         }
@@ -77,7 +75,7 @@ namespace TaskApp.Controllers
         [HttpPost("{toDoId:int}/comment")]
         public async Task<ActionResult<ToDoDTO>> Comment([FromRoute] int toDoId, [FromBody] CreateCommentDTO createCommentDTO)
         {
-            var toDo = await unitOfWork.ToDoRepository.Get(toDoId);
+            var toDo = unitOfWork.ToDoRepository.GetToDoDetails(toDoId);
             if (toDo == null)
             {
                 return BadRequest($"To do with ID {toDoId} doesn't exists");
