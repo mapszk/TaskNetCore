@@ -27,21 +27,26 @@ namespace Name.Controllers
         [HttpPost("signUp")]
         public async Task<ActionResult> SignUp([FromBody] UserRegistrationDTO userRegistrationDTO)
         {
+            var alreadyExists = unitOfWork.UserRepository.ExistsByEmailOrUsername(userRegistrationDTO.Email);
+            if(alreadyExists)
+            {
+                return BadRequest($"User with email {userRegistrationDTO.Email} already exists");
+            }
             var user = mapper.Map<User>(userRegistrationDTO);
             await userManager.CreateAsync(user, userRegistrationDTO.Password);
             return Ok();
         }
 
         // [HttpPost("signIn")]
-        // public Task<ActionResult<object>> SignIn([FromBody] UserSignInDTO userSignInDTO)
+        // public async Task<ActionResult<object>> SignIn([FromBody] UserSignInDTO userSignInDTO)
         // {
-        //     var exists = unitOfWork.UserRepository.ExistsByEmailOrUsername(userSignInDTO.Email);
-        //     if (!exists)
+        //     var user = await unitOfWork.UserRepository.FindByEmail(userSignInDTO.Email);
+        //     if (user == null)
         //     {
         //         return BadRequest("User doesn't exists");
         //     }
-        //     var user = 
-        //     signInManager.SignInAsync()
+        //     var result = await signInManager.PasswordSignInAsync(user, userSignInDTO.Password);
+        //     return { }
         // }
     }
 }
