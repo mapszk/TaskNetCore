@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskApp.Models;
 
@@ -7,14 +8,16 @@ namespace TaskApp.Repositories.Database
     {
         private readonly ApplicationDbContext context;
 
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork(ApplicationDbContext context, UserManager<User> userManager)
         {
             this.context = context;
             this.ToDoRepository = new ToDoRepository(this.context);
             this.CommentRepository = new CommentRepository(this.context);
+            this.UserRepository = new UserRepository(this.context, userManager);
         }
         public ToDoRepository ToDoRepository { get; private set; }
         public CommentRepository CommentRepository { get; private set; }
+        public UserRepository UserRepository { get; private set; }
 
         public async Task SaveAsync()
         {
