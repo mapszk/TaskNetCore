@@ -20,5 +20,15 @@ namespace TaskApp.Repositories
         {
             return await this._userManager.CreateAsync(user, password);
         }
+
+        public async Task<User?> FindByEmail(string email)
+        {
+            return await _context.Users.FindAsync(email);
+        }
+
+        public bool ExistsByEmailOrUsername(string emailOrUsername)
+        {
+            return _context.Users.Where(user => user.Email == emailOrUsername || user.UserName == emailOrUsername).FirstOrDefault() != null;
+        }
     }
 }

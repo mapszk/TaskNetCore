@@ -11,4 +11,12 @@ namespace TaskApp.DTOs
         [Required(ErrorMessage = "Email is required")]
         public string? Email { get; init; }
     }
+
+    public class UserSignInDTO
+    {
+        [Required(ErrorMessage = "Password is required")]
+        public string? Password { get; init; }
+        [Required(ErrorMessage = "Email is required")]
+        public string? Email { get; init; }
+    }
 }
