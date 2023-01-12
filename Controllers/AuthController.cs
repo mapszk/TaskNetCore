@@ -97,7 +97,6 @@ namespace Name.Controllers
                 return BadRequest("User doesn't exists");
             }
             var result = await signInManager.CheckPasswordSignInAsync(user, userSignInDTO.Password, false);
-            logger.LogInformation(result.ToString());
             if (result.Succeeded)
             {
                 string token = CreateToken(user);
@@ -118,6 +117,7 @@ namespace Name.Controllers
         {
             var claims = new List<Claim>
             {
+                // claves para poder buscar luego el usuario
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email)
             };
