@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using TaskApp.DTOs;
 using TaskApp.Models;
 using TaskApp.Repositories.Database;
+using TaskApp.Services.Interfaces;
 
 namespace Name.Controllers
 {
@@ -20,6 +21,7 @@ namespace Name.Controllers
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
         private readonly ILogger<AuthController> logger;
+        private readonly IMailer mailer;
 
         public AuthController(
             IConfiguration configuration,
@@ -27,7 +29,8 @@ namespace Name.Controllers
             SignInManager<User> signInManager,
             UnitOfWork unitOfWork,
             IMapper mapper,
-            ILogger<AuthController> logger
+            ILogger<AuthController> logger,
+            IMailer mailer
         )
         {
             this.userManager = userManager;
@@ -36,6 +39,7 @@ namespace Name.Controllers
             this.mapper = mapper;
             this.configuration = configuration;
             this.logger = logger;
+            this.mailer = mailer;
         }
 
         [HttpPost("signUp")]
@@ -52,8 +56,36 @@ namespace Name.Controllers
                 return BadRequest($"User with username {userRegistrationDTO.UserName} already exists");
             }
             var user = mapper.Map<User>(userRegistrationDTO);
-            await userManager.CreateAsync(user, userRegistrationDTO.Password);
-            return Ok();
+            try
+            {
+                await userManager.CreateAsync(user, userRegistrationDTO.Password);
+                string token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                await mailer.Send(user.Email, "Confirma el mail pa", CreateConfirmEmailBody(token, user.Email), "from@api.com");
+                return Ok();
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+            }
+        }
+
+        [HttpPost("confirmEmail")]
+        public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailDTO confirmEmailDTO)
+        {
+            var user = unitOfWork.UserRepository.FindByEmailOrUsername(confirmEmailDTO.Email);
+            if (user == null)
+            {
+                return BadRequest("User doesn't exists");
+            }
+            try
+            {
+                await userManager.ConfirmEmailAsync(user, confirmEmailDTO.Token);
+                return Ok("Account confirmed");
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+            }
         }
 
         [HttpPost("signIn")]
@@ -73,6 +105,11 @@ namespace Name.Controllers
             }
             else
             {
+                bool isConfirmed = await userManager.IsEmailConfirmedAsync(user);
+                if (!isConfirmed)
+                {
+                    return BadRequest("Email is not confirmed");
+                }
                 return BadRequest("Incorrect password");
             }
         }
@@ -93,6 +130,11 @@ namespace Name.Controllers
             );
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
+        }
+
+        private string CreateConfirmEmailBody(string token, string email)
+        {
+            return $"<h1>Confirma el email:</h1><br><h2>Token: {token}</h2><br><h2>Email: {email}</h2>";
         }
     }
 }

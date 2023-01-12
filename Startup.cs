@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TaskApp.Models;
 using TaskApp.Repositories.Database;
+using TaskApp.Services;
+using TaskApp.Services.Interfaces;
 
 public class Startup
 {
@@ -28,6 +30,7 @@ public class Startup
             options.Password.RequireUppercase = false;
             options.Password.RequireNonAlphanumeric = false;
             options.User.RequireUniqueEmail = true;
+            options.SignIn.RequireConfirmedEmail = true;
         })
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
@@ -69,6 +72,7 @@ public class Startup
             });
         });
         services.AddScoped<UnitOfWork>();
+        services.AddScoped<IMailer, Mailer>();
         services.AddAutoMapper(typeof(Startup));
     }
 

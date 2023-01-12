@@ -19,4 +19,12 @@ namespace TaskApp.DTOs
         [Required(ErrorMessage = "Password is required")]
         public string? Password { get; init; }
     }
+
+    public class ConfirmEmailDTO
+    {
+        [Required(ErrorMessage = "Token is required")]
+        public string? Token { get; set; }
+        [Required(ErrorMessage = "Email is required")]
+        public string? Email { get; set; }
+    }
 }
