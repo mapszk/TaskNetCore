@@ -9,11 +9,10 @@ namespace TaskApp.Repositories
     {
         public ToDoRepository(ApplicationDbContext context) : base(context) { }
 
-        public ToDo GetToDoDetails(int id)
+        public async Task<ToDo> GetToDoDetails(int id)
         {
-            return context.ToDos.Where(toDo => toDo.Id == id)
-                .Include(toDo => toDo.Comments)
-                .Single();
+            return await context.ToDos.Include(toDo => toDo.Comments)
+                .FirstOrDefaultAsync(toDo => toDo.Id == id);
         }
 
         public async Task<List<ToDo>> GetShortToDos()

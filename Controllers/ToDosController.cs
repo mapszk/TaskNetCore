@@ -1,4 +1,8 @@
+using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskApp.DTOs;
 using TaskApp.Models;
@@ -8,21 +12,26 @@ namespace TaskApp.Controllers
 {
     [Route("api/toDos")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ToDosController : ControllerBase
     {
         private readonly UnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly UserManager<User> userManager;
+        private readonly ILogger<ToDosController> logger;
 
-        public ToDosController(UnitOfWork unitOfWork, IMapper mapper)
+        public ToDosController(UnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager, ILogger<ToDosController> logger)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.userManager = userManager;
+            this.logger = logger;
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<ToDoDTO> Get([FromRoute] int id)
+        public async Task<ActionResult<ToDoDTO>> Get([FromRoute] int id)
         {
-            var toDo = unitOfWork.ToDoRepository.GetToDoDetails(id);
+            var toDo = await unitOfWork.ToDoRepository.GetToDoDetails(id);
             if (toDo == null)
             {
                 return NotFound();
@@ -40,10 +49,14 @@ namespace TaskApp.Controllers
         [HttpPost]
         public async Task<ActionResult<ToDoDTO>> Post([FromBody] CreateToDoDTO todoDTO)
         {
+            var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email).Value;
+            User user = unitOfWork.UserRepository.FindByEmailOrUsername(userEmail);
+
             var toDo = mapper.Map<ToDo>(todoDTO);
+            toDo.UserId = user.Id;
             unitOfWork.ToDoRepository.Add(toDo);
             await unitOfWork.SaveAsync();
-            return Created(nameof(Get), mapper.Map<ToDoDTO>(toDo));
+            return Ok(mapper.Map<ToDoDTO>(toDo));
         }
 
         [HttpPut("{id:int}")]
@@ -75,7 +88,7 @@ namespace TaskApp.Controllers
         [HttpPost("{toDoId:int}/comment")]
         public async Task<ActionResult<ToDoDTO>> Comment([FromRoute] int toDoId, [FromBody] CreateCommentDTO createCommentDTO)
         {
-            var toDo = unitOfWork.ToDoRepository.GetToDoDetails(toDoId);
+            var toDo = await unitOfWork.ToDoRepository.GetToDoDetails(toDoId);
             if (toDo == null)
             {
                 return BadRequest($"To do with ID {toDoId} doesn't exists");
@@ -88,13 +101,9 @@ namespace TaskApp.Controllers
         }
 
         [HttpPut("{toDoId:int}/comment/{commentId:int}")]
-        public async Task<ActionResult<ToDoDTO>> EditComment(
-            [FromRoute] int toDoId,
-            [FromRoute] int commentId,
-            [FromBody] CreateCommentDTO createCommentDTO
-        )
+        public async Task<ActionResult<ToDoDTO>> EditComment([FromRoute] int toDoId, [FromRoute] int commentId, [FromBody] CreateCommentDTO createCommentDTO)
         {
-            var toDo = unitOfWork.ToDoRepository.GetToDoDetails(toDoId);
+            var toDo = await unitOfWork.ToDoRepository.GetToDoDetails(toDoId);
             if (toDo == null)
             {
                 return BadRequest($"To do with ID {toDoId} doesn't exists");
