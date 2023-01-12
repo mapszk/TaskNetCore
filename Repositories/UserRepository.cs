@@ -21,9 +21,9 @@ namespace TaskApp.Repositories
             return await this._userManager.CreateAsync(user, password);
         }
 
-        public async Task<User?> FindByEmail(string email)
+        public User? FindByEmailOrUsername(string emailOrUsername)
         {
-            return await _context.Users.FindAsync(email);
+            return _context.Users.Where(user => user.Email == emailOrUsername || user.UserName == emailOrUsername).FirstOrDefault();
         }
 
         public bool ExistsByEmailOrUsername(string emailOrUsername)
