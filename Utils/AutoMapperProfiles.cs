@@ -8,6 +8,8 @@ namespace TaskApp.Utils
     {
         public AutoMapperProfiles()
         {
+            // Inicia los DTO para usarlos: source => dest
+
             CreateMap<UserRegistrationDTO, User>();
 
             CreateMap<ToDo, ToDoDTO>();
