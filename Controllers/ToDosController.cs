@@ -15,6 +15,8 @@ namespace TaskApp.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ToDosController : ControllerBase
     {
+        private const int DefaultPage = 0;
+        private const int DefaultPageSize = 10;
         private readonly UnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly UserManager<User> userManager;
@@ -44,6 +46,23 @@ namespace TaskApp.Controllers
         {
             var toDos = await unitOfWork.ToDoRepository.GetShortToDos();
             return mapper.Map<List<ToDoShortDTO>>(toDos);
+        }
+
+        [HttpGet("GetAllPaginated")]
+        public async Task<ActionResult<PaginationDTO<ToDoShortDTO>>> GetAllPaginated(
+            [FromQuery] string? description,
+            [FromQuery] int pageSize = DefaultPageSize,
+            [FromQuery] int pageNumber = DefaultPage
+        )
+        {
+            var search = await unitOfWork.ToDoRepository.GetAllPaginated(description, pageSize, pageNumber);
+            var mappedToDos = mapper.Map<List<ToDo>, List<ToDoShortDTO>>(search.Item1);
+            var result = new PaginationDTO<ToDoShortDTO>(
+                mappedToDos,
+                mappedToDos.Count,
+                Convert.ToInt32(Math.Ceiling((double)search.Item2 / (double)pageSize))
+            );
+            return Ok(result);
         }
 
         [HttpPost]
