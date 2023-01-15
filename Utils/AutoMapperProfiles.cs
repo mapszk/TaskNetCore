@@ -12,6 +12,7 @@ namespace TaskApp.Utils
 
             CreateMap<UserRegistrationDTO, User>();
             CreateMap<User, UserInfoDTO>()
+                .ForMember(x => x.UserId, x => x.MapFrom(x => x.Id))
                 .ForMember(x => x.ToDosAmmount, x => x.MapFrom(x => x.ToDos.Count));
 
             CreateMap<ToDo, ToDoDTO>();

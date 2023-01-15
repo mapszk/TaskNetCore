@@ -11,12 +11,16 @@ namespace TaskApp.Repositories
 
         public async Task<ToDo> GetToDoDetails(int id)
         {
-            return await context.ToDos.Include(toDo => toDo.Comments).FirstOrDefaultAsync(toDo => toDo.Id == id);
+            return await context.ToDos
+                .Include(toDo => toDo.Comments)
+                .FirstOrDefaultAsync(toDo => toDo.Id == id);
         }
 
         public async Task<List<ToDo>> GetShortToDos()
         {
-            return await context.ToDos.Include(toDo => toDo.Comments).ToListAsync();
+            return await context.ToDos
+                .Include(toDo => toDo.Comments)
+                .ToListAsync();
         }
 
         public async Task<(List<ToDo>, int)> GetAllPaginated(string description, int pageSize, int pageNumber)
