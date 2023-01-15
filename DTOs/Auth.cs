@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using TaskApp.Models;
 
 namespace TaskApp.DTOs
 {
@@ -18,6 +19,22 @@ namespace TaskApp.DTOs
         public string? EmailOrUsername { get; init; }
         [Required(ErrorMessage = "Password is required")]
         public string? Password { get; init; }
+    }
+
+    public class UserInfoDTO
+    {
+        public string? UserId { get; set; }
+        public string? UserName { get; set; }
+        public string? Email { get; set; }
+        public int ToDosAmmount { get; set; }
+    }
+
+    public class AssignRoleDTO
+    {
+        [Required(ErrorMessage = "Username is required")]
+        public string? UserName { get; set; }
+        [Required(ErrorMessage = "Role is required")]
+        public MainRoles Role { get; set; }
     }
 
     public class ConfirmEmailDTO

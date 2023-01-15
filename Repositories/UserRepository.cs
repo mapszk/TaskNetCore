@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TaskApp.Models;
 using TaskApp.Repositories.Database;
 using TaskApp.Repositories.Interfaces;
@@ -18,17 +19,25 @@ namespace TaskApp.Repositories
 
         public async Task<IdentityResult> CreateUser(User user, string password)
         {
-            return await this._userManager.CreateAsync(user, password);
+            return await _userManager.CreateAsync(user, password);
         }
 
-        public User? FindByEmailOrUsername(string emailOrUsername)
+        public async Task<User?> FindByEmailOrUsername(string emailOrUsername)
         {
-            return _context.Users.Where(user => user.Email == emailOrUsername || user.UserName == emailOrUsername).FirstOrDefault();
+            return await _context.Users
+                .Include(u => u.ToDos)
+                .FirstOrDefaultAsync(u => u.Email == emailOrUsername || u.UserName == emailOrUsername);
         }
 
-        public bool ExistsByEmailOrUsername(string emailOrUsername)
+        public async Task<bool> ExistsByEmailOrUsername(string emailOrUsername)
         {
-            return _context.Users.Where(user => user.Email == emailOrUsername || user.UserName == emailOrUsername).FirstOrDefault() != null;
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == emailOrUsername || u.UserName == emailOrUsername) != null;
+        }
+
+        public async Task<IdentityResult> AddRoleToUser(User user, string role)
+        {
+            return await _userManager.AddToRoleAsync(user, role);
         }
     }
 }

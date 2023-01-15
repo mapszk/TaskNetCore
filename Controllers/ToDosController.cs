@@ -48,7 +48,7 @@ namespace TaskApp.Controllers
             return mapper.Map<List<ToDoShortDTO>>(toDos);
         }
 
-        [HttpGet("GetAllPaginated")]
+        [HttpGet("getAllPaginated")]
         public async Task<ActionResult<PaginationDTO<ToDoShortDTO>>> GetAllPaginated(
             [FromQuery] string? description,
             [FromQuery] int pageSize = DefaultPageSize,
@@ -69,7 +69,7 @@ namespace TaskApp.Controllers
         public async Task<ActionResult<ToDoDTO>> Post([FromBody] CreateToDoDTO todoDTO)
         {
             var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email).Value;
-            User user = unitOfWork.UserRepository.FindByEmailOrUsername(userEmail);
+            User user = await unitOfWork.UserRepository.FindByEmailOrUsername(userEmail);
 
             var toDo = mapper.Map<ToDo>(todoDTO);
             toDo.UserId = user.Id;

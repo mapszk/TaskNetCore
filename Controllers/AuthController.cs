@@ -45,12 +45,12 @@ namespace Name.Controllers
         [HttpPost("signUp")]
         public async Task<ActionResult> SignUp([FromBody] UserRegistrationDTO userRegistrationDTO)
         {
-            var emailExists = unitOfWork.UserRepository.ExistsByEmailOrUsername(userRegistrationDTO.Email);
+            var emailExists = await unitOfWork.UserRepository.ExistsByEmailOrUsername(userRegistrationDTO.Email);
             if (emailExists)
             {
                 return BadRequest($"User with email {userRegistrationDTO.Email} already exists");
             }
-            var userNameExists = unitOfWork.UserRepository.ExistsByEmailOrUsername(userRegistrationDTO.UserName);
+            var userNameExists = await unitOfWork.UserRepository.ExistsByEmailOrUsername(userRegistrationDTO.UserName);
             if (userNameExists)
             {
                 return BadRequest($"User with username {userRegistrationDTO.UserName} already exists");
@@ -72,7 +72,7 @@ namespace Name.Controllers
         [HttpPost("confirmEmail")]
         public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailDTO confirmEmailDTO)
         {
-            var user = unitOfWork.UserRepository.FindByEmailOrUsername(confirmEmailDTO.Email);
+            var user = await unitOfWork.UserRepository.FindByEmailOrUsername(confirmEmailDTO.Email);
             if (user == null)
             {
                 return BadRequest("User doesn't exists");
@@ -91,7 +91,7 @@ namespace Name.Controllers
         [HttpPost("signIn")]
         public async Task<ActionResult<string>> SignInAsync([FromBody] UserSignInDTO userSignInDTO)
         {
-            var user = unitOfWork.UserRepository.FindByEmailOrUsername(userSignInDTO.EmailOrUsername);
+            var user = await unitOfWork.UserRepository.FindByEmailOrUsername(userSignInDTO.EmailOrUsername);
             if (user == null)
             {
                 return BadRequest("User doesn't exists");
@@ -112,6 +112,21 @@ namespace Name.Controllers
                 return BadRequest("Incorrect password");
             }
         }
+
+        // [HttpPost("assignRole")]
+        // public async Task<ActionResult> AssignRole([FromBody] AssignRoleDTO assignRoleDTO)
+        // {
+        //     try
+        //     {
+        //         var user = await unitOfWork.UserRepository.FindByEmailOrUsername(assignRoleDTO.UserName);
+        //         if (user == null) 
+        //             return BadRequest("User doesn't exists");
+
+        //         var result = await unitOfWork.UserRepository.AddRoleToUser(user, assignRoleDTO.Role).ToString());
+
+        //     }
+        //     return Ok();
+        // }
 
         private string CreateToken(User user)
         {

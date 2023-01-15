@@ -6,7 +6,7 @@ namespace TaskApp.Repositories.Interfaces
     public interface IUserRepository
     {
         Task<IdentityResult> CreateUser(User user, string password);
-        User? FindByEmailOrUsername(string emailOrUsername);
-        bool ExistsByEmailOrUsername(string emailOrUsername);
+        Task<User?> FindByEmailOrUsername(string emailOrUsername);
+        Task<bool> ExistsByEmailOrUsername(string emailOrUsername);
     }
 }
