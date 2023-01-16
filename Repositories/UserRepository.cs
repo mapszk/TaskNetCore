@@ -10,11 +10,13 @@ namespace TaskApp.Repositories
     {
         private ApplicationDbContext _context;
         private UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
 
-        public UserRepository(ApplicationDbContext context, UserManager<User> userManager)
+        public UserRepository(ApplicationDbContext context, UserManager<User> userManager, RoleManager<Role> roleManager)
         {
             this._context = context;
             this._userManager = userManager;
+            this._roleManager = roleManager;
         }
 
         public async Task<IdentityResult> CreateUser(User user, string password)
@@ -38,6 +40,11 @@ namespace TaskApp.Repositories
         public async Task<IdentityResult> AddRoleToUser(User user, string role)
         {
             return await _userManager.AddToRoleAsync(user, role);
+        }
+
+        public async Task<IdentityResult> CreateRole(Role role)
+        {
+            return await _roleManager.CreateAsync(role);
         }
     }
 }

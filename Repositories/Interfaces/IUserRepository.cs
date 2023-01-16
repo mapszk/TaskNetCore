@@ -8,5 +8,6 @@ namespace TaskApp.Repositories.Interfaces
         Task<IdentityResult> CreateUser(User user, string password);
         Task<User?> FindByEmailOrUsername(string emailOrUsername);
         Task<bool> ExistsByEmailOrUsername(string emailOrUsername);
+        Task<IdentityResult> CreateRole(Role role);
     }
 }

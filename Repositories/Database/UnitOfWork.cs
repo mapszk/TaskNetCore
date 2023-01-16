@@ -8,12 +8,12 @@ namespace TaskApp.Repositories.Database
     {
         private readonly ApplicationDbContext context;
 
-        public UnitOfWork(ApplicationDbContext context, UserManager<User> userManager)
+        public UnitOfWork(ApplicationDbContext context, UserManager<User> userManager, RoleManager<Role> roleManager)
         {
             this.context = context;
             this.ToDoRepository = new ToDoRepository(this.context);
             this.CommentRepository = new CommentRepository(this.context);
-            this.UserRepository = new UserRepository(this.context, userManager);
+            this.UserRepository = new UserRepository(this.context, userManager, roleManager);
         }
         public ToDoRepository ToDoRepository { get; private set; }
         public CommentRepository CommentRepository { get; private set; }
