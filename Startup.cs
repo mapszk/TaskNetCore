@@ -76,7 +76,7 @@ public class Startup
         services.AddAutoMapper(typeof(Startup));
     }
 
-    public void Configure(WebApplication app, IWebHostEnvironment env, ApplicationDbContext applicationDbContext)
+    public void Configure(WebApplication app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
@@ -85,7 +85,11 @@ public class Startup
         }
         if (env.IsProduction())
         {
-            applicationDbContext.Database.Migrate();
+            using (var scope = app.Services.CreateScope())
+            {
+                var dataContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                dataContext.Database.Migrate();
+            }
         }
         app.UseHttpsRedirection();
         app.UseAuthentication();
