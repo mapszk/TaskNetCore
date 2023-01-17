@@ -18,20 +18,20 @@ namespace TaskApp.Services
         public async Task Send(string to, string subject, string html, string? from = null)
         {
             var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(configuration["Mailer:User"]));
+            email.From.Add(MailboxAddress.Parse(configuration["MailerUser"]));
             email.To.Add(MailboxAddress.Parse(to));
             email.Subject = subject;
             email.Body = new TextPart(TextFormat.Html) { Text = html };
 
             using var smtp = new SmtpClient();
             smtp.Connect(
-                configuration.GetSection("Mailer:Host").Value,
-                Convert.ToInt32(configuration.GetSection("Mailer:Port").Value),
+                configuration["MailerHost"],
+                Convert.ToInt32(configuration["MailerPort"]),
                 SecureSocketOptions.StartTls
             );
             smtp.Authenticate(
-                configuration.GetSection("Mailer:User").Value,
-                configuration.GetSection("Mailer:Pass").Value
+                configuration["MailerUser"],
+                configuration["MailerPass"]
             );
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
