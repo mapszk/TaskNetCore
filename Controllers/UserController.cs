@@ -29,7 +29,7 @@ namespace TaskApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetUserInfo()
+        public async Task<ActionResult<UserInfoDTO>> GetUserInfo()
         {
             var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email).Value;
             User user = await unitOfWork.UserRepository.FindByEmailOrUsername(userEmail);
@@ -37,5 +37,22 @@ namespace TaskApp.Controllers
             var mappedUser = mapper.Map<User, UserInfoDTO>(user);
             return Ok(mappedUser);
         }
+
+        [HttpPost("assignRole")]
+        public async Task<ActionResult<UserInfoDTO>> AssignRole([FromBody] AssignRoleDTO assignRoleDTO)
+        {
+            var user = await unitOfWork.UserRepository.FindByEmailOrUsername(assignRoleDTO.UserName);
+            if (user == null)
+                return BadRequest("User doesn't exists");
+            var roleExists = await unitOfWork.UserRepository.RoleExists(assignRoleDTO.Role);
+            if (!roleExists)
+                return BadRequest("Role doesn't exists");
+            var result = await unitOfWork.UserRepository.AssignRoleToUser(user, assignRoleDTO.Role);
+            if (result.Succeeded)
+                return Ok();
+            else
+                return BadRequest();
+        }
+
     }
 }

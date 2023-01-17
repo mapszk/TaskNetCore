@@ -28,6 +28,7 @@ namespace TaskApp.Repositories
         {
             return await _context.Users
                 .Include(u => u.ToDos)
+                .Include(u => u.UserRoles)
                 .FirstOrDefaultAsync(u => u.Email == emailOrUsername || u.UserName == emailOrUsername);
         }
 
@@ -45,6 +46,31 @@ namespace TaskApp.Repositories
         public async Task<IdentityResult> CreateRole(Role role)
         {
             return await _roleManager.CreateAsync(role);
+        }
+
+        public async Task<Role> FindRole(string name)
+        {
+            return await _roleManager.FindByNameAsync(name);
+        }
+
+        public async Task<List<Role>> GetRoles()
+        {
+            return await _roleManager.Roles.ToListAsync();
+        }
+
+        public async Task<bool> RoleExists(string name)
+        {
+            return await _roleManager.RoleExistsAsync(name);
+        }
+
+        public async Task<IdentityResult> AssignRoleToUser(User user, string role)
+        {
+            return await _userManager.AddToRoleAsync(user, role);
+        }
+
+        public async Task<IdentityResult> RemoveRoleToUser(User user, string role)
+        {
+            return await _userManager.RemoveFromRoleAsync(user, role);
         }
     }
 }
