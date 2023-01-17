@@ -29,6 +29,7 @@ namespace TaskApp.Repositories
             return await _context.Users
                 .Include(u => u.ToDos)
                 .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Email == emailOrUsername || u.UserName == emailOrUsername);
         }
 

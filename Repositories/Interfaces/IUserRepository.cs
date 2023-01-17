@@ -9,5 +9,10 @@ namespace TaskApp.Repositories.Interfaces
         Task<User?> FindByEmailOrUsername(string emailOrUsername);
         Task<bool> ExistsByEmailOrUsername(string emailOrUsername);
         Task<IdentityResult> CreateRole(Role role);
+        Task<Role> FindRole(string name);
+        Task<List<Role>> GetRoles();
+        Task<bool> RoleExists(string name);
+        Task<IdentityResult> AssignRoleToUser(User user, string role);
+        Task<IdentityResult> RemoveRoleToUser(User user, string role);
     }
 }

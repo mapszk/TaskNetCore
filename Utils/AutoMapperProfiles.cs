@@ -13,8 +13,9 @@ namespace TaskApp.Utils
             // users
             CreateMap<UserRegistrationDTO, User>();
             CreateMap<User, UserInfoDTO>()
-                .ForMember(x => x.UserId, x => x.MapFrom(x => x.Id))
-                .ForMember(x => x.ToDosAmmount, x => x.MapFrom(x => x.ToDos.Count));
+                .ForMember(x => x.UserId, options => options.MapFrom(x => x.Id))
+                .ForMember(x => x.ToDosAmmount, options => options.MapFrom(x => x.ToDos.Count))
+                .ForMember(x => x.UserRoles, options => options.MapFrom(MapUserRoles));
 
             // roles
             CreateMap<CreateRoleDTO, Role>();
@@ -24,12 +25,23 @@ namespace TaskApp.Utils
             CreateMap<CreateToDoDTO, ToDo>();
             CreateMap<UpdateToDoDTO, ToDo>();
             CreateMap<ToDo, ToDoShortDTO>()
-                .ForMember(x => x.CommentsAmount, x => x.MapFrom(x => x.Comments.Count));
+                .ForMember(x => x.CommentsAmount, options => options.MapFrom(x => x.Comments.Count));
 
             // comments
             CreateMap<CreateCommentDTO, Comment>();
             CreateMap<Comment, CommentDTO>();
 
+        }
+
+        private List<string> MapUserRoles(User user, UserInfoDTO userInfoDTO)
+        {
+            var result = new List<string>();
+            if (user.UserRoles == null || user.UserRoles.Count == 0) { return result; }
+            foreach (var role in user.UserRoles)
+            {
+                result.Add(role.Role.Name);
+            }
+            return result;
         }
     }
 }

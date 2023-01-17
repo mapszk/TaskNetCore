@@ -22,6 +22,32 @@ namespace TaskApp.Controllers
             this.userManager = userManager;
         }
 
+
+        [HttpGet]
+        public async Task<ActionResult<List<Role>>> GetRoles()
+        {
+            var roles = await unitOfWork.UserRepository.GetRoles();
+            return Ok(roles);
+        }
+
+        [HttpGet("{name}")]
+        public async Task<ActionResult<Role>> GetRole([FromRoute] string name)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(name))
+                    return BadRequest("Role name is required");
+                var role = await unitOfWork.UserRepository.FindRole(name);
+                if (role == null)
+                    return NotFound();
+                return Ok(role);
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] CreateRoleDTO createRoleDTO)
         {

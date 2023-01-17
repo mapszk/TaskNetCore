@@ -54,5 +54,21 @@ namespace TaskApp.Controllers
                 return BadRequest();
         }
 
+        [HttpDelete("removeRole")]
+        public async Task<ActionResult> RemoveRole([FromBody] AssignRoleDTO assignRoleDTO)
+        {
+            var user = await unitOfWork.UserRepository.FindByEmailOrUsername(assignRoleDTO.UserName);
+            if (user == null)
+                return BadRequest("User doesn't exists");
+            var roleExists = await unitOfWork.UserRepository.RoleExists(assignRoleDTO.Role);
+            if (!roleExists)
+                return BadRequest("Role doesn't exists");
+            var result = await unitOfWork.UserRepository.RemoveRoleToUser(user, assignRoleDTO.Role);
+            if (result.Succeeded)
+                return Ok();
+            else
+                return BadRequest();
+        }
+
     }
 }
