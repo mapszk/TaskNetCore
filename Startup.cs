@@ -76,12 +76,16 @@ public class Startup
         services.AddAutoMapper(typeof(Startup));
     }
 
-    public void Configure(WebApplication app, IWebHostEnvironment env)
+    public void Configure(WebApplication app, IWebHostEnvironment env, ApplicationDbContext applicationDbContext)
     {
         if (env.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+        }
+        if (env.IsProduction())
+        {
+            applicationDbContext.Database.Migrate();
         }
         app.UseHttpsRedirection();
         app.UseAuthentication();
