@@ -21,7 +21,7 @@ public class Startup
     {
         services.AddControllers();
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(configuration["DatabaseURL"]));
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddIdentity<User, Role>(options =>
             {
